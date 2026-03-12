@@ -1,0 +1,10 @@
+{
+ "compilerOptions": {
+ "target": "ES2022", //version Javascript générée
+ "module": "CommonJS",
+ "rootDir": "./src", //Code Source
+ "outDir": "./dist", //Code Compilé
+ "strict": true, //active le typage strict (fortement recommandé)
+ "esModuleInterop": true
+ }
+}
