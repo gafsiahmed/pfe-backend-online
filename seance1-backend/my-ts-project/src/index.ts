@@ -64,31 +64,30 @@ let student2 : unknown = {
 console.log(student2)
 
 
+type Role = "Admin" | "User" | "Manager"
 interface User {
     id : number;
     name : string;
     email : string;
     age? : number;
     readonly createdAt : Date;
+    sayHello(name: string): string;
 }
 
 
-type Role = "Admin" | "User" | "Manager"
 interface Admin extends User {
     role : Role,
     permissions : Array<string>,
 }
-
-
-
-
-
 
 let user1 : User = {
     name : "Ahmed Gafsi",
     email : "ahmed@gmail.com",
     createdAt : new Date(),
     id : 1,
+    sayHello(name: string): string {
+        return `Hello ${name}, I am ${this.name}`
+    }
     }
 
 
@@ -98,7 +97,10 @@ let admin1 : Admin = {
     createdAt : new Date(),
     role :"Admin",
     id : 2,
-    permissions : ['read','write','delete']
+    permissions : ['read','write','delete'],
+    sayHello(name: string): string {
+        return `Hello ${name}, I am ${this.name} and I am an ${this.role}`
+    }
 }
 
 user1.name = "Mortadha Maamri"

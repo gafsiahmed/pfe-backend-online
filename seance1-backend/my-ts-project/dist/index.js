@@ -43,6 +43,9 @@ let user1 = {
     email: "ahmed@gmail.com",
     createdAt: new Date(),
     id: 1,
+    sayHello(name) {
+        return `Hello ${name}, I am ${this.name}`;
+    }
 };
 let admin1 = {
     name: "Eya Bouzidi",
@@ -50,7 +53,10 @@ let admin1 = {
     createdAt: new Date(),
     role: "Admin",
     id: 2,
-    permissions: ['read', 'write', 'delete']
+    permissions: ['read', 'write', 'delete'],
+    sayHello(name) {
+        return `Hello ${name}, I am ${this.name} and I am an ${this.role}`;
+    }
 };
 user1.name = "Mortadha Maamri";
 // user1.createdAt = new Date()
