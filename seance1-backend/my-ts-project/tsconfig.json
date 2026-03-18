@@ -5,6 +5,9 @@
  "rootDir": "./src", //Code Source
  "outDir": "./dist", //Code Compilé
  "strict": true, //active le typage strict (fortement recommandé)
- "esModuleInterop": true
+ "noImplicitAny": true,
+ "strictNullChecks": true, // null/undefined doivent être explicites
+ "strictFunctionTypes": true,
+ "noUnusedParameters": true, 
  }
 }

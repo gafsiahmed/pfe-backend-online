@@ -67,3 +67,32 @@ function getFirstItem(arr) {
 }
 console.log("first item is", getFirstItem([10, 20, 30]));
 console.log("first item is", getFirstItem(["ali", "mohamed", "Eya"]));
+console.log(getFirstItem([false, true, false]));
+function printLength(item) {
+    console.log(item.length);
+}
+printLength("Hello World");
+printLength([1, 10, 8, 9, 0]);
+let mohamedAyecha = {
+    name: "Mohamed Ayecha",
+    height: 185,
+    weight: 75
+};
+let dog = {
+    name: "Rex",
+    species: "Berger Allemand"
+};
+function logAttributeValue(obj, key) {
+    console.log("the value from ", obj, "is :", obj[key]);
+}
+logAttributeValue(mohamedAyecha, 'name');
+logAttributeValue(dog, 'species');
+console.log('*****************');
+let golf4 = {
+    year: "2005",
+    model: "Golf 4 version 1.6"
+};
+let newVariable = "Hello World";
+console.log(newVariable);
+console.log(golf4.model);
+let myName = "Ahmed Gafsi";

@@ -121,5 +121,76 @@ console.log("first item is" ,getFirstItem<number>([10,20,30]))
 
 console.log("first item is" ,getFirstItem<string>(["ali","mohamed","Eya"]))
 
+console.log(getFirstItem<boolean>([false,true, false]))
+
+interface HasLength {
+    length : number
+}
 
 
+function printLength<T extends HasLength>(item :T): void {
+    console.log(item.length)
+}
+
+
+printLength<string>("Hello World")
+printLength<Array<number>>([1,10,8,9,0])
+// printLength<number>(125)
+
+
+
+interface Person {
+    name : string;
+    height : number;
+    weight : number;    
+}
+
+interface Animal {
+    name : string;
+    species : string;
+}
+
+
+let mohamedAyecha : Person = {
+    name : "Mohamed Ayecha",
+    height : 185,
+    weight : 75
+}
+
+let dog : Animal = {
+    name : "Rex",
+    species : "Berger Allemand"
+}
+
+
+function logAttributeValue<T,K extends keyof T>(obj : T,key : K)  {
+    console.log("the value from ",obj,"is :" ,obj[key])
+}
+
+
+
+
+logAttributeValue<Person,'name'>(mohamedAyecha,'name')
+logAttributeValue<Animal,'species'>(dog ,'species')
+
+
+console.log('*****************')
+interface Car {
+    year :string;
+    model : any;
+}
+
+let golf4 : Car = {
+    year : "2005",
+    model : "Golf 4 version 1.6"
+}
+
+let newVariable : any = "Hello World"
+
+console.log(newVariable)
+
+
+console.log(golf4.model)
+
+
+let myName : string = "Ahmed Gafsi"
