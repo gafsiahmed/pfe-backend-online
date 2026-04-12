@@ -1,18 +1,20 @@
 import Router from "express"
 import { createNewUser, deleteUser, getAllUsers ,getUserByIdController, patchUserById, updateUserController } from "../controllers/users.controller.js"
+import authentificate from "../middlewares/auth.js"
+import accessByRole from "../middlewares/accessByRole.js"
 
 
 const router = Router()
 
 // The First Endpoint ( GET /users )
-router.get('/users',getAllUsers )
+router.get('/users',authentificate,accessByRole(['admin']),getAllUsers )
 // Get user by ID 
-router.get('/users/:id',getUserByIdController)
+router.get('/users/:id',authentificate,accessByRole(['admin','user']),getUserByIdController)
 // The Second Endpoint ( POST /users )
-router.post('/users', createNewUser )
-router.put('/users/:id', updateUserController)
-router.patch('/users/:id', patchUserById)
-router.delete('/users/:id',deleteUser )
+router.post('/users', authentificate,createNewUser )
+router.put('/users/:id', authentificate,updateUserController)
+router.patch('/users/:id',authentificate, patchUserById)
+router.delete('/users/:id',authentificate,deleteUser )
 
 
 export default router
