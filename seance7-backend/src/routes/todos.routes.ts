@@ -1,6 +1,6 @@
 import Router from "express"
 import { createNewTodoController, getAllTodosController, getTodoByIdController } from "../controllers/todos.controller.js"
-import authentificate from "../middlewares/auth.js"
+import authentificate from "../middlewares/authentificate.js"
 
 const router = Router()
 

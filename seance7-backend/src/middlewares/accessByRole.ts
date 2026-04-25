@@ -1,25 +1,31 @@
-import { Request, Response, NextFunction } from "express";7
+import { Request, Response, NextFunction } from "express";
 
+interface AuthenticatedRequest extends Request {
+    user?: {
+        id?: string;
+        role?: string;
+    };
+}
 
+export default function accessByRole(allowedRoles: string[]) {
+    return (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+        const role = String(req.user?.role || "").toLowerCase();
+        const normalizedAllowedRoles = allowedRoles.map((r) => r.toLowerCase());
 
-export default function accessByRole(allowedRoles : string[]){
-    return (req:Request,res:Response, next : NextFunction)=>{
-
-        const userRole = req.headers['authorization']?.substring(7) as string 
-        if(!userRole){
+        if (!role) {
             res.status(401).json({
-                message : 'Token is missing or invalid'
-            })
-
+                message: "Unauthorized",
+            });
             return;
-        
-    }
-    if (!allowedRoles.includes(userRole)){
-        res.status(403).json({
-            message : 'Forbidden :  You have no access to this resource'
-        })
-        return;
-    }
-    next();
-    }
+        }
+
+        if (!normalizedAllowedRoles.includes(role)) {
+            res.status(403).json({
+                message: "Forbidden :  You have no access to this resource",
+            });
+            return;
+        }
+
+        next();
+    };
 }

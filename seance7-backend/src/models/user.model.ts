@@ -11,6 +11,7 @@ export interface IUser {
   email: string;
   isMarried: boolean;
   password: string;
+  role : string;
 }
 
 const userSchema = new mongoose.Schema({
@@ -33,6 +34,11 @@ const userSchema = new mongoose.Schema({
         type : String,
         required : true
     },
+    role : {
+        type : String,  
+        enum : ['user','admin'],
+        default : 'user'
+    },
     isMarried : Boolean
 
 })
@@ -47,8 +53,8 @@ const userSchema = new mongoose.Schema({
 // })
 
 
-userSchema.methods.comparePassword = async function(passwordToCompare : string){
-    return await bcrypt.compare(passwordToCompare,this.password)
-}
+// userSchema.methods.comparePassword = async function(passwordToCompare : string){
+//     return 
+// }
 
 export const User = mongoose.model<IUser>("User",userSchema)
