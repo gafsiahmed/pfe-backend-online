@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Model } from "mongoose";
 import bcrypt from "bcrypt"
 
 
@@ -14,7 +14,12 @@ export interface IUser {
   role : string;
 }
 
-const userSchema = new mongoose.Schema({
+// we need to extend the Document interface to include our custom methods and properties for the user model
+export interface IUserModel extends Model<IUser> {
+    findUserByEmail(email: string): Promise<IUser | null>;
+}
+
+const userSchema = new mongoose.Schema<IUser, IUserModel>({
     firstName : {
         type : String,
         required : true,
@@ -44,6 +49,22 @@ const userSchema = new mongoose.Schema({
 })
 
 
+userSchema.methods.returnFullName = function(){
+    return this.firstName + " " + this.lastName
+}
+
+userSchema.statics.findUserByEmail = function(email :string){
+    return this.findOne({
+        email : email
+    })
+}
+
+userSchema.statics.findAdults = function(){
+    return this.find({
+        $and : [ {$gte : 18},{$lte : 60} ]
+    })
+}
+
 // userSchema.pre("save", async function(next){
 //        if(!this.isModified("password")){
 //         return ;
@@ -57,4 +78,4 @@ const userSchema = new mongoose.Schema({
 //     return 
 // }
 
-export const User = mongoose.model<IUser>("User",userSchema)
+export const User = mongoose.model<IUser, IUserModel>("User",userSchema)

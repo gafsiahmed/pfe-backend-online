@@ -9,7 +9,8 @@ import accessByRole from "../middlewares/accessByRole.js"
 const router = Router()
 
 // The First Endpoint ( GET /users )
-router.get('/users',authentificate, accessByRole(['admin']),getAllUsers )
+router.get('/users',authentificate,accessByRole(['admin']),getAllUsers )
+// router.get('/users',authentificate, accessByRole(['admin']),getAllUsers )
 // Get user by ID 
 router.get('/users/:id',authentificate,getUserByIdController)
 // The Second Endpoint ( POST /users )

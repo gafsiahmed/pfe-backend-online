@@ -1,57 +1,65 @@
 import {Request , Response} from "express"
-import { createNewTodo, getTodoById, getTodos, Todo } from "../services/todos.service.js";
+import { createTodo, getTodoById, getTodosByUser } from "../services/todos.service.js";
 
 
-/*
+export async function getTodoByUserId(req:any,res : Response){
+    try {
+        const userId = req.user.id
+        const todo = await getTodosByUser(userId)
 
-getAllTodosController 
-getTodoByIdController
-createNewTodoController
-updateTodoController
-patchTodoController
-deleteTodoController
-
-*/
-
-
-export function getAllTodosController(req :Request,res : Response){
-   const todos = getTodos();
-   if(todos.length ===0 || todos === null){
-    res.status(404).json({
-        message : 'No todos found'
-    })
-    return;
-   }
-    res.status(200).json(todos)
+        console.log(todo , "niveau controller")
+        res.status(200).json({
+            message : "Todos retrieved successfully",
+            todos : todo
+        })
+    }catch(err : any){
+        res.status(500).json({
+            message : err.message || "Internal Server Error"
+        })
+    }
+   
 }
 
 
-export function getTodoByIdController(req :Request,res : Response){
-     const id = Number(req.params.id)
-     const todo = getTodoById(id)
-     if(!todo){
-        res.status(404).json({
-            message : `Todo with id ${id} not found`
-        })
-        return;
-     }
-     res.status(200).json(todo)
+export function getTodoByIdAndUserId(req :Request,res : Response){
+     
 }
 
 
-export function createNewTodoController(req :Request,res : Response){
-     const newTodo : Todo = req.body
-     if(!newTodo.title || !newTodo.description || !newTodo.status || !newTodo.priority || !newTodo.category){
-        res.status(400).json({
-            message : 'Missing required fields'
+export function CreateNewTodo(req : any,res : Response){
+      try {
+        const userId = req.user.id
+        const {
+            title,
+            description,
+            owner,
+            category
+        } = req.body
+        
+        if(!title || !description || !owner || !category){
+            res.status(400).json({
+                message : "All Fields are required"
+            })
+            return;
+        }
+
+        const createdTodo = createTodo(
+            {
+                title,
+                description,
+                owner,
+                category
+            },
+            userId
+        )
+        res.status(201).json({
+            message : "Todo created successfully",
+            todo : createdTodo
         })
-        return;
-    }
-    if(newTodo.description.length <=10 && newTodo.description.length >= 500){
-        res.status(400).json({
-            message : 'Description should be between 10 & 500 characters'
+
+      } catch (err : any) { 
+        res.status(500).json({
+            message : err.message || "Internal Server Error"
         })
-    }
-    const  newTodoCreated = createNewTodo(newTodo)
-    res.status(201).json(newTodoCreated)
+      }
 }

@@ -1,5 +1,6 @@
 // import { getUsers , addUser , deleteUserById, getUserById, updateUser, User, updateUserPartial } from "../services/users.service.js"
 
+import { User } from "../models/user.model.js"
 import {getUsers,addUser,getUserById, updateUser, deleteUserById} from "../services/users.service.js"
 
 import {Request , Response} from "express"
@@ -11,6 +12,31 @@ import {Request , Response} from "express"
 
 export async function getAllUsers(req : Request,res : Response ) {
     try {
+        // we will check if there is req.query ( req.query is an object that contains all the query parameters in the url )
+        // will we focus on pagination so we expect 2 parameters :  page and limit
+        if(req.query.page && req.query.limit){
+
+            const page = Number(req.query.page) || 1
+            const limit = Number(req.query.limit) || 10
+
+
+            const skip = (page - 1) * limit
+
+            const data = await User.find().skip(skip).limit(limit)
+
+            const totalUsers = await User.countDocuments()
+
+            res.status(200).json({
+                data : data,
+                totalUsers : totalUsers,
+                page : page,
+                limit : limit,
+                totalPages : Math.ceil(totalUsers / limit)
+            })
+            return;
+        }
+
+
         const users = await getUsers()
         res.status(200).json({
             message : "Users retrieved successfully",
@@ -118,4 +144,32 @@ export function deleteUser (req: Request, res: Response) {
     })
     }
   
+}
+/* 
+----------------------------------------------------------------------------------------
+using the static methods we created in the User model to find the user
+by email and return it to the client
+----------------------------------------------------------------------------------------
+ */
+
+export async function findUserByEmailController(req : Request,res : Response){
+    try {
+         const email = req.body.email
+         if(!email){
+            res.status(400).json({
+                message : "Email is required"
+            })
+            return;
+         }
+
+         const user = await User.findUserByEmail(email)
+         res.status(200).json({
+            message : "User found successfully",
+            user : user
+         })
+    }catch(err : any){
+        res.status(500).json({
+            message : err.message || "Internal Server Error"
+        })
+    }
 }

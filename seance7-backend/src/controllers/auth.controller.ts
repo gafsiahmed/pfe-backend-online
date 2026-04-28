@@ -1,5 +1,6 @@
 import { Request, Response } from "express"; 
 import { login, register } from "../services/auth.service.js";
+import { User } from "../models/user.model.js";
 
 
 interface AuthenticatedRequest extends Request {
@@ -46,6 +47,8 @@ export async function registerController(req : AuthenticatedRequest ,res : Respo
         })
     }
 }
+
+
 
 
 export async function loginController(req:Request,res : Response){
